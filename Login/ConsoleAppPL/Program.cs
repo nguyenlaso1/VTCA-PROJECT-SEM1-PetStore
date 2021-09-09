@@ -15,12 +15,12 @@ namespace ConsoleAppPL
             Console.WriteLine();
             Staff staff = new Staff(){UserName = userName, Password = pass};
             StaffBl bl = new StaffBl();
-            int login = bl.Login(staff);
-            if(login <= 0){
-                Console.WriteLine("Can't Login");
+            staff = bl.Login(staff);
+            if(staff.Role <= 0){
+                Console.Write("Can't Login");
             }
             else{
-                Console.WriteLine("Dang nhap thanh cong");
+                Console.Write("Welcome to System...");
             }
         }
         static string GetPassword()
