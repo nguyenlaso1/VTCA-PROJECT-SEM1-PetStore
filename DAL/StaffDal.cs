@@ -1,4 +1,3 @@
-using System.Xml.Linq;
 using System;
 using MySql.Data.MySqlClient;
 using Persistence;
@@ -10,16 +9,15 @@ namespace  DAL
         public Staff Login(Staff staff){
         lock (connection)
         {
-            Console.WriteLine(staff.UserName + " - " + staff.Password);
             try{
                 connection.Open();
                 MySqlCommand command = connection.CreateCommand();
-                command.CommandText = "select *from Staffs where staff_username=@userName and staff_password=@userPass;";
+                command.CommandText = "select *from Staffs where staff_username = @userName and staff_password = @userPass;";
                 command.Parameters.AddWithValue("@userName", staff.UserName);
                 command.Parameters.AddWithValue("@userPass", Md5Algorithms.CreateMD5(staff.Password));
                 MySqlDataReader reader = command.ExecuteReader();
                 if(reader.Read()){
-                    staff.Role = reader.GetInt32("role");
+                    staff.Role = reader.GetInt32("staff_role");
                 }
                 else{
                     staff.Role = 0;
