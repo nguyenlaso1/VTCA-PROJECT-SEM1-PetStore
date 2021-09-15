@@ -1,5 +1,4 @@
 ﻿
-using System.Security.AccessControl;
 using System.Text.RegularExpressions;
 using System;
 using Persistence;
@@ -72,19 +71,71 @@ namespace ConsoleAppPL
                 Console.WriteLine("--------------------------");
                 choice = Choice(3);
                 switch (choice)
-                    {
-                        case 1:
-                            
-                            break;
-                        case 2:
-                            
-                            break;
-                        case 3:     
+                {
+                    case 1:
+                        int searchChoice;
+                        do
+                            {
+                            Console.Clear();
                             Console.WriteLine("--------------------------");
-                            Console.Write(" Exited.");
-                            Environment.Exit(0);
-                            break;
-                    }
+                            Console.WriteLine("|    Select to Search    |");
+                            Console.WriteLine("--------------------------");
+                            Console.WriteLine("| 1. SEARCH BY NAME      |");
+                            Console.WriteLine("| 2. SEAECH BY CATEGORY  |");
+                            Console.WriteLine("| 3. SEAECH BY BRAND     |");
+                            Console.WriteLine("| 4. SEAECH BY ID        |");
+                            Console.WriteLine("| 5. RETURN TO MAIN MENU |");
+                            Console.WriteLine("--------------------------");
+                            searchChoice = Choice(5);
+                            switch (searchChoice)
+                            {
+                                case 1:
+
+                                    break;
+                                case 2:
+
+                                    break;
+                                case 3:
+
+                                    break;
+                                case 4:
+                                    string searchByIDKeyWord = EnterSearchKeyWord();
+                                    Item item = new Item();
+                                    ItemBl iBl = new ItemBl();
+                                    item = iBl.SearchByID(searchByIDKeyWord, item);
+                                    if(item.ItemId = 0)
+                                    {
+                                        Console.WriteLine(" Invalid ID");    
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine(" Item ID: {0}", item.ItemId);
+                                        Console.WriteLine(" Item Name: {0}", item.ItemName);
+                                        Console.WriteLine(" Item Price: {0}", item.ItemPrice);
+                                        Console.WriteLine(" Item Brand: {0}", item.ItemBrand);
+                                        Console.WriteLine(" Item Category: {0}", item.ItemCategory);
+                                        Console.WriteLine(" Item Quantity: {0}", item.ItemQuantity);
+                                        Console.WriteLine(" Item Weight: {0}", item.ItemWeight);
+                                        Console.WriteLine(" Item Description: {0}", item.ItemDescription);
+                                    }
+                                    Console.ReadKey();
+                                    break;
+                                case 5:
+                                    ShowMainMenu();
+                                    break;
+                                
+                            }
+                        } while (choice !=5);
+                        break;
+                    case 2:
+                            
+                        break;
+                    case 3:     
+                        Console.WriteLine("--------------------------");
+                        Console.Write(" Exited.");
+                        Environment.Exit(0);
+                        break;
+                }
             } while (choice != 3);
 
         }
@@ -104,6 +155,13 @@ namespace ConsoleAppPL
                 isSuccess = int.TryParse(strChoice, out choice);
             }
             return choice;
+        }
+
+        static string EnterSearchKeyWord(){
+            string searchKeyWord;
+            Console.Write(" Enter Search KeyWord: ");
+            searchKeyWord = Console.ReadLine();
+            return searchKeyWord;
         }
     }
 }
