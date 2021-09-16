@@ -1,4 +1,4 @@
-﻿
+﻿using Internal;
 using System.Text.RegularExpressions;
 using System;
 using Persistence;
@@ -63,11 +63,11 @@ namespace ConsoleAppPL
             {
                 Console.Clear();
                 Console.WriteLine("--------------------------");
-                Console.WriteLine("|  WellCome To PetStore  |");
+                Console.WriteLine("|  WELLCOME TO PETSTORE  |");
                 Console.WriteLine("--------------------------");
-                Console.WriteLine("| 1. SEARCH ITEM         |");
-                Console.WriteLine("| 2. CREATE INVOICE      |");
-                Console.WriteLine("| 3. EXIT                |");
+                Console.WriteLine("| 1. Search item         |");
+                Console.WriteLine("| 2. Create invoice      |");
+                Console.WriteLine("| 3. Exit                |");
                 Console.WriteLine("--------------------------");
                 choice = Choice(3);
                 switch (choice)
@@ -78,13 +78,13 @@ namespace ConsoleAppPL
                             {
                             Console.Clear();
                             Console.WriteLine("--------------------------");
-                            Console.WriteLine("|    Select to Search    |");
+                            Console.WriteLine("|    SELECT TO SEARCH    |");
                             Console.WriteLine("--------------------------");
-                            Console.WriteLine("| 1. SEARCH BY NAME      |");
-                            Console.WriteLine("| 2. SEAECH BY CATEGORY  |");
-                            Console.WriteLine("| 3. SEAECH BY BRAND     |");
-                            Console.WriteLine("| 4. SEAECH BY ID        |");
-                            Console.WriteLine("| 5. RETURN TO MAIN MENU |");
+                            Console.WriteLine("| 1. Search by name      |");
+                            Console.WriteLine("| 2. Search by category  |");
+                            Console.WriteLine("| 3. Search by brand     |");
+                            Console.WriteLine("| 4. Search by ID        |");
+                            Console.WriteLine("| 5. Retrun to main menu |");
                             Console.WriteLine("--------------------------");
                             searchChoice = Choice(5);
                             switch (searchChoice)
@@ -103,20 +103,48 @@ namespace ConsoleAppPL
                                     Item item = new Item();
                                     ItemBl iBl = new ItemBl();
                                     item = iBl.SearchByID(searchByIDKeyWord, item);
-                                    if(item.ItemId = 0)
+                                    if(item.ItemId == 0)
                                     {
                                         Console.WriteLine(" Invalid ID");    
                                     }
                                     else
                                     {
-                                        Console.WriteLine(" Item ID: {0}", item.ItemId);
-                                        Console.WriteLine(" Item Name: {0}", item.ItemName);
-                                        Console.WriteLine(" Item Price: {0}", item.ItemPrice);
-                                        Console.WriteLine(" Item Brand: {0}", item.ItemBrand);
-                                        Console.WriteLine(" Item Category: {0}", item.ItemCategory);
-                                        Console.WriteLine(" Item Quantity: {0}", item.ItemQuantity);
-                                        Console.WriteLine(" Item Weight: {0}", item.ItemWeight);
-                                        Console.WriteLine(" Item Description: {0}", item.ItemDescription);
+                                        Console.Clear();
+                                        Console.WriteLine("===================================================================================");
+                                        Console.WriteLine("|                                 ITEM INFOMATION                                 |");
+                                        Console.WriteLine("===================================================================================");
+                                        Console.WriteLine("| Item ID:           | {0,-58} |", item.ItemId);
+                                        Console.WriteLine("-----------------------------------------------------------------------------------");
+                                        Console.WriteLine("| Item Name:         | {0,-58} |", item.ItemName);
+                                        Console.WriteLine("-----------------------------------------------------------------------------------");
+                                        Console.WriteLine("| Item Price:        | {00:#,##0} VND                                                 |", item.ItemPrice);
+                                        Console.WriteLine("-----------------------------------------------------------------------------------");
+                                        Console.WriteLine("| Item Brand:        | {0,-58} |", item.ItemBrand);
+                                        Console.WriteLine("-----------------------------------------------------------------------------------");
+                                        Console.WriteLine("| Item Category:     | {0,-58} |", item.ItemCategory);
+                                        Console.WriteLine("-----------------------------------------------------------------------------------");
+                                        Console.WriteLine("| Item Quantity:     | {0,-58} |", item.ItemQuantity);
+                                        Console.WriteLine("-----------------------------------------------------------------------------------");
+                                        Console.WriteLine("| Item Weight:       | {0,-58} |", item.ItemWeight);
+                                        Console.WriteLine("-----------------------------------------------------------------------------------");
+                                        Console.Write("| Item Description:  |");
+                                        string str = item.ItemDescription;
+                                        string subStr;
+                                        int i = 73;
+                                        while(str.Length > 0 && i < str.Length){
+                                            i = 50;
+                                            if (str.Length >= i)
+                                            {
+                                            while(str[i] != ' ') i = i + 1;
+                                            subStr = str.Substring(0, i);
+                                            str = str.Remove(0, i);
+                                            str = str.Remove(0,1);
+                                            Console.WriteLine(" {0,-58} |", subStr);
+                                            Console.Write("|                    |");
+                                            }
+                                        }
+                                        Console.WriteLine(" {0,-58} |", str);
+                                        Console.WriteLine("===================================================================================");
                                     }
                                     Console.ReadKey();
                                     break;
@@ -159,6 +187,7 @@ namespace ConsoleAppPL
 
         static string EnterSearchKeyWord(){
             string searchKeyWord;
+            Console.WriteLine("--------------------------");
             Console.Write(" Enter Search KeyWord: ");
             searchKeyWord = Console.ReadLine();
             return searchKeyWord;
