@@ -9,7 +9,8 @@ namespace  DAL
         public Staff Login(Staff staff){
         lock (connection)
         {
-            try{
+            try
+            {
                 connection.Open();
                 MySqlCommand command = connection.CreateCommand();
                 command.CommandText = "select *from Staffs where staff_username = @userName and staff_password = @userPass;";
@@ -24,10 +25,12 @@ namespace  DAL
                 }
                 reader.Close();
             }
-            catch{
+            catch
+            {
                 staff.Role = -1;
             }
-            finally{
+            finally
+            {
                 connection.Close();
             }
         }
