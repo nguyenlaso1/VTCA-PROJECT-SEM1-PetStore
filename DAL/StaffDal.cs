@@ -19,6 +19,8 @@ namespace  DAL
                 MySqlDataReader reader = command.ExecuteReader();
                 if(reader.Read()){
                     staff.Role = reader.GetInt32("staff_role");
+                    staff.StaffName = reader.GetString("staff_name");
+                    staff.StaffID = reader.GetInt32("staff_id");
                 }
                 else{
                     staff.Role = 0;

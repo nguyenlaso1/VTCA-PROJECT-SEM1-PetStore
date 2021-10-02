@@ -11,26 +11,32 @@ namespace ConsoleAppPL
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("=============================================================================");
-            Console.WriteLine("|                                   Login                                   |");
-            Console.WriteLine("=============================================================================");
+            Console.WriteLine("=====================================================================");
+            Console.WriteLine(@"|     __________        __   _________ __                           |");                     
+            Console.WriteLine(@"|    \______   \ _____/  |_/   _____//  |_  ___________   ____      |");
+            Console.WriteLine(@"|     |     ___// __ \   __\_____  \\   __\/  _ \_  __ \_/ __ \     |");
+            Console.WriteLine(@"|     |    |   \  ___/|  | /        \|  | (  <_> )  | \/\  ___/     |");
+            Console.WriteLine(@"|     |____|    \___  >__|/_______  /|__|  \____/|__|    \___  >    |");
+            Console.WriteLine(@"|                   \/            \/                         \/     |");
+            Console.WriteLine("|                             Dang nhap                             |");
+            Console.WriteLine("=====================================================================");
             for(; ;)
             {
-                Console.Write(" User Name: ");
+                Console.Write(" Ten dang nhap: ");
                 string userName = Console.ReadLine();
                 while(!(Regex.IsMatch(userName, @"^\w{8,}")))
                 {
-                    Console.WriteLine(" User Name must be over 8 characters and doesn't contain special characters!\n");
-                    Console.Write(" User Name: ");
+                    Console.WriteLine(" Ten dang nhap phai tu 8 ki tu tro len va khong co ki tu dac biet!");
+                    Console.Write(" Ten dang nhap: ");
                     userName = Console.ReadLine();
                 }
-                Console.Write(" Password:  ");
+                Console.Write(" Mat khau:  ");
                 string pass = GetPassword();
                 Console.WriteLine();
                 while(!(Regex.IsMatch(pass, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$")))
                 {
-                    Console.WriteLine(" Password must be over 8 characters include lowercase letter, numbers and at \n least one uppercase letter and doesn't contain special characters!\n");
-                    Console.Write(" Password:  ");
+                    Console.WriteLine(" Mat khau phai tu 8 ki tu tro len, co it nhat 1 chu hoa 1 chu thuong\n 1 so va khong chua ki tu dac viet");
+                    Console.Write(" Mat khau:  ");
                     pass = GetPassword();
                     Console.WriteLine();
                 }
@@ -39,11 +45,11 @@ namespace ConsoleAppPL
                 StaffBl bl = new StaffBl();
                 staff = bl.Login(staff);
                 if(staff.Role <= 0){
-                    Console.WriteLine(" Wrong User Name or Password!");
+                    Console.WriteLine(" Sai ten dang nhap hoac mat khau!");
                 }
                 else
                 {
-                    ShowMainMenu();
+                    ShowMainMenu(staff);
                 }
             }
         }
@@ -71,20 +77,28 @@ namespace ConsoleAppPL
             return pass;
         }
 
-        static void ShowMainMenu()
+        static void ShowMainMenu(Staff staff)
         {
+            StaffBl bl = new StaffBl();
+            ItemBl iBl = new ItemBl();
+            InvoiceBl inBl = new InvoiceBl();
             int choice;
             do
             {
                 Console.Clear();
-                Console.WriteLine("==========================");
-                Console.WriteLine("|        PETSTORE        |");
-                Console.WriteLine("|       Main menu        |");
-                Console.WriteLine("--------------------------");
-                Console.WriteLine("| 1. Search item         |");
-                Console.WriteLine("| 2. Create invoice      |");
-                Console.WriteLine("| 3. Exit                |");
-                Console.WriteLine("==========================");
+                Console.WriteLine("===============================================================");
+                Console.WriteLine(@"|  __________        __   _________ __                        |");                     
+                Console.WriteLine(@"| \______   \ _____/  |_/   _____//  |_  ___________   ____   |");
+                Console.WriteLine(@"|  |     ___// __ \   __\_____  \\   __\/  _ \_  __ \_/ __ \  |");
+                Console.WriteLine(@"|  |    |   \  ___/|  | /        \|  | (  <_> )  | \/\  ___/  |");
+                Console.WriteLine(@"|  |____|    \___  >__|/_______  /|__|  \____/|__|    \___  > |");
+                Console.WriteLine(@"|                \/            \/                         \/  |");
+                Console.WriteLine("|                     Cac chuc nang chinh                     |");
+                Console.WriteLine("---------------------------------------------------------------");
+                Console.WriteLine("| 1. Tim kiem san pham                                        |");
+                Console.WriteLine("| 2. Tao hoa don moi                                          |");
+                Console.WriteLine("| 3. Thoat                                                    |");
+                Console.WriteLine("===============================================================");
                 choice = Choice(3);
                 switch (choice)
                 {
@@ -93,114 +107,162 @@ namespace ConsoleAppPL
                         do
                             {
                             Console.Clear();
-                            Console.WriteLine("==========================");
-                            Console.WriteLine("|        PETSTORE        |");
-                            Console.WriteLine("|     Search feature     |");
-                            Console.WriteLine("--------------------------");
-                            Console.WriteLine("| 1. Search by name      |");
-                            Console.WriteLine("| 2. Search by category  |");
-                            Console.WriteLine("| 3. Search by brand     |");
-                            Console.WriteLine("| 4. Search by ID        |");
-                            Console.WriteLine("| 5. Return to main menu |");
-                            Console.WriteLine("==========================");
+                            Console.WriteLine("===============================================================");
+                            Console.WriteLine(@"| __________        __   _________ __                         |");                     
+                            Console.WriteLine(@"| \______   \ _____/  |_/   _____//  |_  ___________   ____   |");
+                            Console.WriteLine(@"|  |     ___// __ \   __\_____  \\   __\/  _ \_  __ \_/ __ \  |");
+                            Console.WriteLine(@"|  |    |   \  ___/|  | /        \|  | (  <_> )  | \/\  ___/  |");
+                            Console.WriteLine(@"|  |____|    \___  >__|/_______  /|__|  \____/|__|    \___  > |");
+                            Console.WriteLine(@"|                \/            \/                         \/  |");
+                            Console.WriteLine("|                     Tim kiem san pham                       |");
+                            Console.WriteLine("---------------------------------------------------------------");
+                            Console.WriteLine("| 1. Search by name                                           |");
+                            Console.WriteLine("| 2. Search by category                                       |");
+                            Console.WriteLine("| 3. Search by brand                                          |");
+                            Console.WriteLine("| 4. Search by ID                                             |");
+                            Console.WriteLine("| 5. Return to main menu                                      |");
+                            Console.WriteLine("=============================================================== ");
                             searchChoice = Choice(5);
                             switch (searchChoice)
                             {
                                 case 1:
                                     string searchKeyWordByName = EnterSearchKeyWord();
                                     string commSearchByName = "SELECT Items.item_id, Items.item_name, Items.item_price, Brands.brand_name, Categories.category_name FROM Items INNER JOIN Categories ON Items.item_category = Categories.category_id INNER JOIN Brands ON Items.item_brand = Brands.brand_id WHERE Items.item_name like '%"+searchKeyWordByName+"%';";
-                                    List<Item> itemL1 = new List<Item>();
-                                    ItemBl iBl1 = new ItemBl();
-                                    itemL1 = iBl1.GetItem(itemL1, commSearchByName);
-                                    ShowSearchResult(itemL1, searchKeyWordByName);
+                                    iBl.SearchItem(commSearchByName, searchKeyWordByName);
                                     Console.ReadKey();
                                     break;
                                 case 2:
                                     string searchKeyWordByCategory = EnterSearchKeyWord();
                                     string commSearchByCategory = "SELECT Items.item_id, Items.item_name, Items.item_price, Brands.brand_name, Categories.category_name FROM Items INNER JOIN Categories ON Items.item_category = Categories.category_id INNER JOIN Brands ON Items.item_brand = Brands.brand_id WHERE Categories.category_name like '%"+searchKeyWordByCategory+"%';";
-                                    List<Item> itemL2 = new List<Item>();
-                                    ItemBl iBl2 = new ItemBl();
-                                    itemL2 = iBl2.GetItem(itemL2, commSearchByCategory);
-                                    ShowSearchResult(itemL2, searchKeyWordByCategory);
+                                    iBl.SearchItem(commSearchByCategory, searchKeyWordByCategory);
                                     Console.ReadKey();
                                     break;
                                 case 3:
                                     string searchKeyWordByBrand = EnterSearchKeyWord();
                                     string commSearchByBrand = "SELECT Items.item_id, Items.item_name, Items.item_price, Brands.brand_name, Categories.category_name FROM Items INNER JOIN Categories ON Items.item_category = Categories.category_id INNER JOIN Brands ON Items.item_brand = Brands.brand_id WHERE Brands.brand_name like '%"+searchKeyWordByBrand+"%';";
-                                    List<Item> itemL3 = new List<Item>();
-                                    ItemBl iBl3 = new ItemBl();
-                                    itemL3 = iBl3.GetItem(itemL3, commSearchByBrand);
-                                    ShowSearchResult(itemL3, searchKeyWordByBrand);
+                                    iBl.SearchItem(commSearchByBrand, searchKeyWordByBrand);
                                     Console.ReadKey();
                                     break;
                                 case 4:
                                     string searchKeyWordById = EnterSearchKeyWord();
-                                    Item item = new Item();
-                                    ItemBl iBl4 = new ItemBl();
-                                    item = iBl4.GetItemByID(searchKeyWordById, item);
-                                    if(item.ItemId == 0)
-                                    {
-                                        Console.Write(" No search results for key word = {0}", searchKeyWordById);    
-                                    }
-                                    else
-                                    {
-                                        Console.Clear();
-                                        Console.WriteLine("===============================================================================================");
-                                        Console.WriteLine("|                           SEARCH RESULTS FOR SEARCH KEY WORD = {0,-29}|", searchKeyWordById);
-                                        Console.WriteLine("===============================================================================================");
-                                        Console.WriteLine("| Item ID:           | {0,-70} |", item.ItemId);
-                                        Console.WriteLine("-----------------------------------------------------------------------------------------------");
-                                        Console.WriteLine("| Item Name:         | {0,-70} |", item.ItemName);
-                                        Console.WriteLine("-----------------------------------------------------------------------------------------------");
-                                        Console.WriteLine("| Item Price:        | {00,-70:#,##0} |", item.ItemPrice);
-                                        Console.WriteLine("-----------------------------------------------------------------------------------------------");
-                                        Console.WriteLine("| Item Brand:        | {0,-70} |", item.ItemBrand);
-                                        Console.WriteLine("-----------------------------------------------------------------------------------------------");
-                                        Console.WriteLine("| Item Category:     | {0,-70} |", item.ItemCategory);
-                                        Console.WriteLine("-----------------------------------------------------------------------------------------------");
-                                        Console.WriteLine("| Item Quantity:     | {0,-70} |", item.ItemQuantity);
-                                        Console.WriteLine("-----------------------------------------------------------------------------------------------");
-                                        Console.WriteLine("| Item Weight:       | {0,-70} |", item.ItemWeight);
-                                        Console.WriteLine("-----------------------------------------------------------------------------------------------");
-                                        Console.Write("| Item Description:  |");
-                                        
-                                        string str = ' ' + item.ItemDescription;
-                                        string subStr;
-                                        int i = 65;
-                                        try
-                                        {
-                                            while(str.Length > 0 && i < str.Length)
-                                            {
-                                                i = 65;
-                                                while(str[i] != ' ') {
-                                                    i = i + 1;
-                                                    if (i >= str.Length) break;
-                                                }
-                                                subStr = str.Substring(1,i);
-                                                Console.WriteLine(" {0,-70} |", subStr);
-                                                Console.Write("|                    |");
-                                               str = str.Remove(0,i);
-                                            }
-                                        }
-                                        catch(System.ArgumentOutOfRangeException){}
-                                        finally
-                                        {
-                                            Console.WriteLine(" {0,-70} |", str.Remove(0,1));
-                                            Console.WriteLine("===============================================================================================");
-                                            Console.Write(" Press any key to continue...");
-                                        }
-                                    }
+                                    iBl.SearchItemByID(searchKeyWordById);
+                                    Console.Write(" Press any key to continue...");
                                     Console.ReadKey();
                                     break;
                                 case 5:
-                                    ShowMainMenu();
-                                    break;
-                                
+                                    ShowMainMenu(staff);
+                                    break; 
                             }
                         } while (choice !=5);
                         break;
                     case 2:
-                            
+                        Console.Clear();
+                        Console.WriteLine("===============================================================");
+                        Console.WriteLine(@"|  __________        __   _________ __                        |");                     
+                        Console.WriteLine(@"| \______   \ _____/  |_/   _____//  |_  ___________   ____   |");
+                        Console.WriteLine(@"|  |     ___// __ \   __\_____  \\   __\/  _ \_  __ \_/ __ \  |");
+                        Console.WriteLine(@"|  |    |   \  ___/|  | /        \|  | (  <_> )  | \/\  ___/  |");
+                        Console.WriteLine(@"|  |____|    \___  >__|/_______  /|__|  \____/|__|    \___  > |");
+                        Console.WriteLine(@"|                \/            \/                         \/  |");
+                        Console.WriteLine("|                         Tao hoa don                         |");
+                        Console.WriteLine("===============================================================");
+                        Invoice invoice = new Invoice();
+                        invoice.InvoiceStaff = staff;
+                        do
+                        {
+                            Console.Write(" Nhap ID cua san pham de them vao hoa don: ");
+                            string ID = Console.ReadLine();
+                            Item item = iBl.SearchItemByID(ID);
+                            if(item.ItemId == 0) continue;
+                            else
+                            {
+                            string strQuantity;
+                            bool isSuccess;
+                            int quantity;
+                            Console.Write(" Nhap so luong: ");
+                            strQuantity = Console.ReadLine();
+                            isSuccess = int.TryParse(strQuantity, out quantity);
+                            while (!isSuccess)
+                            {
+                                Console.Write(" So luong khong hop le! Nhap so luong: ");
+                                strQuantity = Console.ReadLine();
+                                isSuccess = int.TryParse(strQuantity, out quantity);
+                            }     
+                            item.Quantity = quantity;          
+                            if(item.ItemQuantity <= 0)
+                            {
+                                Console.WriteLine(" Them khong thanh cong");
+                                Console.WriteLine(" San pham nay da het!");
+                                continue;
+                            }  
+                            if(item.Quantity > item.ItemQuantity)
+                            {
+                                Console.WriteLine(" Them khong thanh cong");
+                                Console.WriteLine(" So luong nhap vao vuot qua so luong co san!");
+                                continue;
+                            }
+                            item.Amount = (double)item.Quantity * item.ItemPrice;
+                            invoice.itemsList.Add(item);
+                            }
+                        } while(IsContinue());
+                        Console.Write(" Nhap ten khach hang: ");
+                        string customerName = Console.ReadLine();
+                        while(!(Regex.IsMatch(customerName, @"(^[A-Z,a-z]+$)|^([A-Z,a-z]+ *)+[A-Z,a-z]$")))
+                        {
+                            Console.WriteLine(" Ten khach hang khong hop le!");
+                            Console.Write(" Nhap ten khach hang: ");
+                            customerName = Console.ReadLine();
+                        }
+                        Console.Write(" Nhap so dien thoai khach hang: ");
+                        string customerNumberPhone = Console.ReadLine();
+                        while(!(Regex.IsMatch(customerNumberPhone, @"^(0|\+84)\d{9}$")))
+                        {
+                            Console.WriteLine(" So dien thoai khong hop le!");
+                            Console.Write(" Nhap so dien thoai khach hang: ");
+                            customerNumberPhone = Console.ReadLine();
+                        }
+                        customerName = FixString(customerName);
+                        invoice.InvoiceCustomer = new Customer {CustomerName = customerName, CustomerNumberPhone = customerNumberPhone};
+                        if(invoice.itemsList == null || invoice.itemsList.Count == 0) Console.WriteLine(" Hoa don chua co san pham!");
+                        if(inBl.CreateInvoice(invoice))
+                        {
+                            Console.WriteLine(" Tao hoa don thanh cong!");
+                            Console.Write(" Nhan nut bat ki de xem hoa don...");
+                            Console.ReadKey();
+                            Console.Clear();
+                            Console.WriteLine("=================================================================================================");
+                            Console.WriteLine(@"|                  __________        __   _________ __                                          |");                     
+                            Console.WriteLine(@"|                  \______   \ _____/  |_/   _____//  |_  ___________   ____                    |");
+                            Console.WriteLine(@"|                   |     ___// __ \   __\_____  \\   __\/  _ \_  __ \_/ __ \                   |");
+                            Console.WriteLine(@"|                   |    |   \  ___/|  | /        \|  | (  <_> )  | \/\  ___/                   |");
+                            Console.WriteLine(@"|                   |____|    \___  >__|/_______  /|__|  \____/|__|    \___  >                  |");
+                            Console.WriteLine(@"|                                 \/            \/                         \/                   |");
+                            Console.WriteLine("|                                       Hoa don ban hang                                        |");
+                            Console.WriteLine("-------------------------------------------------------------------------------------------------");
+                            Console.WriteLine("| Thoi gian: {0,-61}    Ma hoa don: {1,5} |", invoice.InvoiceDate, invoice.InvoiceId);
+                            Console.WriteLine("| Nhan vien ban hang: {0,-41} Dia chi: Q.Long Bien, TP.Ha Noi |", invoice.InvoiceStaff.StaffName);
+                            Console.WriteLine("-------------------------------------------------------------------------------------------------");
+                            Console.WriteLine("| Mat hang                                                            Don gia    SL      T.Tien |");
+                            foreach (Item item in invoice.itemsList)
+                            {
+                                Console.WriteLine("| {0,-65} {01,9:#,##0} {2,5} {03,11:#,##0} |", item.ItemName, item.ItemPrice, item.Quantity, item.Amount);
+                                invoice.total += item.Amount;
+                            }
+                            Console.WriteLine("-------------------------------------------------------------------------------------------------");
+                            Console.WriteLine("| TONG TIEN PHAI THANH TOAN {00,67:#,##0} |", invoice.total);
+                            Console.WriteLine("-------------------------------------------------------------------------------------------------");
+                            Console.WriteLine("| Ten khach hang: {0,-49} So dien thoai: {1,12} |", invoice.InvoiceCustomer.CustomerName, invoice.InvoiceCustomer.CustomerNumberPhone);
+                            Console.WriteLine("-------------------------------------------------------------------------------------------------");
+                            Console.WriteLine("|                               CAM ON QUY KHACH VA HEN GAP LAI!                                |");
+                            Console.WriteLine("|                        Hotline: 18006968             Website: www.petstore.com                |");
+                            Console.WriteLine("=================================================================================================");
+                        }
+                        else
+                        {
+                            Console.WriteLine(" Tao hoa don that bai!");
+                            Console.ReadKey();
+                        }
+                        Console.ReadKey();
                         break;
                     case 3:     
                         Console.WriteLine("--------------------------");
@@ -229,32 +291,6 @@ namespace ConsoleAppPL
             return choice;
         }
 
-        static void ShowSearchResult(List<Item> itemL, string searchKeyWord)
-        {
-            if (itemL.Count == 0)
-            {
-                Console.WriteLine("--------------------------");
-                Console.WriteLine(" No search results for key word = {0}", searchKeyWord);
-                Console.Write(" Press any key to continue...");
-            }
-            else
-            {
-                Console.Clear();
-                Console.WriteLine(" About {0} results", itemL.Count);
-                Console.WriteLine("=========================================================================================================================");
-                Console.WriteLine("|                                          SEARCH RESUTL FOR KEY WORD = {0,-48}|", searchKeyWord);
-                Console.WriteLine("=========================================================================================================================");
-                Console.WriteLine("| ID | Item Name                                                         | Price     | Brand            | Category      |");
-                foreach (Item i in itemL)
-                {
-                    Console.WriteLine("-------------------------------------------------------------------------------------------------------------------------");
-                    Console.WriteLine("| {0,-2} | {1,-65} | {02,-9:#,##0} | {3,-16} | {4,-13} |", i.ItemId, i.ItemName, i.ItemPrice, i.ItemBrand, i.ItemCategory);
-                }
-                Console.WriteLine("=========================================================================================================================");
-                Console.Write(" Press any key to return...");
-            }
-        }
-
         static string EnterSearchKeyWord()
         {
             string searchKeyWord;
@@ -265,5 +301,31 @@ namespace ConsoleAppPL
             return searchKeyWord;
         }
 
+        static bool IsContinue()
+        {
+            string Continue;
+            bool isMatch;
+            Console.Write(" Ban co muon them san pham khac vao hoa don khong? (Y/N): ");
+            Continue = Console.ReadLine();
+            isMatch = Regex.IsMatch(Continue, @"^[yYnN]$");
+            while (!isMatch)
+            {
+                Console.Write(" Choice (Y/N)!!!: ");
+                Continue = Console.ReadLine();
+                isMatch = Regex.IsMatch(Continue, @"^[yYnN]$");
+            }
+            if (Continue == "y" || Continue == "Y") return true;
+            return false;
+        }
+
+        static string FixString(string str)
+        {
+            char[] a = str.ToLower().ToCharArray();
+            for (int i = 0; i < a.Length; i++)
+            {
+                a[i] = i == 0 || a[i - 1] == ' ' ? char.ToUpper(a[i]) : a[i];
+            }
+            return new string(a);
+        }
     }
 }
