@@ -116,37 +116,34 @@ namespace ConsoleAppPL
                             Console.WriteLine(@"|                \/            \/                         \/  |");
                             Console.WriteLine("|                     Tim kiem san pham                       |");
                             Console.WriteLine("---------------------------------------------------------------");
-                            Console.WriteLine("| 1. Search by name                                           |");
-                            Console.WriteLine("| 2. Search by category                                       |");
-                            Console.WriteLine("| 3. Search by brand                                          |");
-                            Console.WriteLine("| 4. Search by ID                                             |");
-                            Console.WriteLine("| 5. Return to main menu                                      |");
+                            Console.WriteLine("| 1. Tim kiem theo ten                                        |");
+                            Console.WriteLine("| 2. Tim kiem theo loai                                       |");
+                            Console.WriteLine("| 3. Tim kiem theo nhan hieu                                  |");
+                            Console.WriteLine("| 4. Tim kiem theo ID                                         |");
+                            Console.WriteLine("| 5. Quay lai cac chuc nang chinh                             |");
                             Console.WriteLine("=============================================================== ");
                             searchChoice = Choice(5);
                             switch (searchChoice)
                             {
                                 case 1:
                                     string searchKeyWordByName = EnterSearchKeyWord();
-                                    string commSearchByName = "SELECT Items.item_id, Items.item_name, Items.item_price, Brands.brand_name, Categories.category_name FROM Items INNER JOIN Categories ON Items.item_category = Categories.category_id INNER JOIN Brands ON Items.item_brand = Brands.brand_id WHERE Items.item_name like '%"+searchKeyWordByName+"%';";
+                                    string commSearchByName = "SELECT Items.item_id, Items.item_name, Items.item_price, Items.item_quantity, Items.item_weight, Items.item_description, Brands.brand_name, Categories.category_name FROM Items INNER JOIN Categories ON Items.item_category = Categories.category_id INNER JOIN Brands ON Items.item_brand = Brands.brand_id WHERE Items.item_name like '%"+searchKeyWordByName+"%';";
                                     iBl.SearchItem(commSearchByName, searchKeyWordByName);
-                                    Console.ReadKey();
                                     break;
                                 case 2:
                                     string searchKeyWordByCategory = EnterSearchKeyWord();
-                                    string commSearchByCategory = "SELECT Items.item_id, Items.item_name, Items.item_price, Brands.brand_name, Categories.category_name FROM Items INNER JOIN Categories ON Items.item_category = Categories.category_id INNER JOIN Brands ON Items.item_brand = Brands.brand_id WHERE Categories.category_name like '%"+searchKeyWordByCategory+"%';";
+                                    string commSearchByCategory = "SELECT Items.item_id, Items.item_name, Items.item_price, Items.item_quantity, Items.item_weight, Items.item_description, Brands.brand_name, Categories.category_name FROM Items INNER JOIN Categories ON Items.item_category = Categories.category_id INNER JOIN Brands ON Items.item_brand = Brands.brand_id WHERE Categories.category_name like '%"+searchKeyWordByCategory+"%';";
                                     iBl.SearchItem(commSearchByCategory, searchKeyWordByCategory);
-                                    Console.ReadKey();
                                     break;
                                 case 3:
                                     string searchKeyWordByBrand = EnterSearchKeyWord();
-                                    string commSearchByBrand = "SELECT Items.item_id, Items.item_name, Items.item_price, Brands.brand_name, Categories.category_name FROM Items INNER JOIN Categories ON Items.item_category = Categories.category_id INNER JOIN Brands ON Items.item_brand = Brands.brand_id WHERE Brands.brand_name like '%"+searchKeyWordByBrand+"%';";
+                                    string commSearchByBrand = "SELECT Items.item_id, Items.item_name, Items.item_price, Items.item_quantity, Items.item_weight, Items.item_description, Brands.brand_name, Categories.category_name FROM Items INNER JOIN Categories ON Items.item_category = Categories.category_id INNER JOIN Brands ON Items.item_brand = Brands.brand_id WHERE Brands.brand_name like '%"+searchKeyWordByBrand+"%';";
                                     iBl.SearchItem(commSearchByBrand, searchKeyWordByBrand);
-                                    Console.ReadKey();
                                     break;
                                 case 4:
                                     string searchKeyWordById = EnterSearchKeyWord();
                                     iBl.SearchItemByID(searchKeyWordById);
-                                    Console.Write(" Press any key to continue...");
+                                    Console.Write(" Nhan phim bat ki de tiep tuc...");
                                     Console.ReadKey();
                                     break;
                                 case 5:
@@ -195,6 +192,12 @@ namespace ConsoleAppPL
                                 Console.WriteLine(" San pham nay da het!");
                                 continue;
                             }  
+                            if(item.Quantity <= 0)
+                            {
+                                Console.WriteLine(" Them khong thanh cong");
+                                Console.WriteLine(" So luong nhap vao khong hop le!");
+                                continue;
+                            }
                             if(item.Quantity > item.ItemQuantity)
                             {
                                 Console.WriteLine(" Them khong thanh cong");
@@ -260,13 +263,13 @@ namespace ConsoleAppPL
                         else
                         {
                             Console.WriteLine(" Tao hoa don that bai!");
-                            Console.ReadKey();
+                            Console.Write(" Nhan nut bat ki de tiep tuc...");
                         }
                         Console.ReadKey();
                         break;
                     case 3:     
                         Console.WriteLine("--------------------------");
-                        Console.Write(" Exited.");
+                        Console.Write(" Da thoat.");
                         Environment.Exit(0);
                         break;
                 }
@@ -279,12 +282,12 @@ namespace ConsoleAppPL
             int choice;
             string strChoice;
             bool isSuccess;
-            Console.Write(" Choice: ");
+            Console.Write(" Chon: ");
             strChoice = Console.ReadLine();
             isSuccess = int.TryParse(strChoice, out choice);
             while (!isSuccess || choice < 1 || choice > menuIndex)
             {
-                Console.Write(" Re-choice (1-{0}): ", menuIndex);
+                Console.Write(" Chon lai (1-{0}): ", menuIndex);
                 strChoice = Console.ReadLine();
                 isSuccess = int.TryParse(strChoice, out choice);
             }
@@ -295,7 +298,7 @@ namespace ConsoleAppPL
         {
             string searchKeyWord;
             Console.WriteLine("---------------------------------------------------");
-            Console.Write(" Enter Search KeyWord: ");
+            Console.Write(" Nhap tu khoa tim kiem: ");
             searchKeyWord = Console.ReadLine();
             Console.WriteLine("---------------------------------------------------");
             return searchKeyWord;

@@ -66,6 +66,9 @@ namespace  DAL
                         item.ItemPrice = reader.GetDouble("item_price");
                         item.ItemBrand = reader.GetString("brand_name");
                         item.ItemCategory = reader.GetString("category_name");
+                        item.ItemQuantity = reader.GetInt32("item_quantity");
+                        item.ItemWeight = reader.GetString("item_weight");
+                        item.ItemDescription = reader.GetString("item_description");
                         itemL.Add(item);
                     }
                     reader.Close();
