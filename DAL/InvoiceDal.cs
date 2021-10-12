@@ -2,6 +2,7 @@ using System;
 using MySql.Data.MySqlClient;
 using Persistence;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace  DAL
 {
@@ -22,19 +23,59 @@ namespace  DAL
                 MySqlTransaction trans = connection.BeginTransaction();
                 command.Transaction = trans;
                 MySqlDataReader reader = null;
-                try
+                bool check = false;
+                if (invoice.InvoiceCustomer == null || invoice.InvoiceCustomer.CustomerName == null || invoice.InvoiceCustomer.CustomerName == "")
                 {
-                    command.CommandText = @"insert into Customers(customer_name, customer_phonenumber)
-                    values ('" + invoice.InvoiceCustomer.CustomerName + "','" + (invoice.InvoiceCustomer.CustomerNumberPhone ?? "") + "');";
-                    command.ExecuteNonQuery();
-                    command.CommandText = "select LAST_INSERT_ID() as customer_id;";
+                    invoice.InvoiceCustomer = new Customer() { CustomerId = 1 };
+                }
+                try
+                {   
+                    Console.Write(" Nhap so dien thoai khach hang: ");
+                    string customerNumberPhone = Console.ReadLine();
+                    while(!(Regex.IsMatch(customerNumberPhone, @"^(0|\+84)\d{9}$")))
+                    {
+                        Console.WriteLine(" So dien thoai khong hop le!");
+                        Console.Write(" Nhap so dien thoai khach hang: ");
+                        customerNumberPhone = Console.ReadLine();
+                    }
+
+
+                    command.CommandText = "select *from Customers where customer_phonenumber = '"+customerNumberPhone+"';";
                     reader = command.ExecuteReader();
                     if (reader.Read())
                     {
-                    invoice.InvoiceCustomer.CustomerId = reader.GetInt32("customer_id");
+                        Console.WriteLine(" Nguoi mua hang la khach hang cu!");
+                        Console.WriteLine(" Ten khach hang: {0}", reader.GetString("customer_name"));
+                        invoice.InvoiceCustomer.CustomerNumberPhone = reader.GetString("customer_phonenumber");
+                        invoice.InvoiceCustomer.CustomerId = reader.GetInt32("customer_id");
+                        invoice.InvoiceCustomer.CustomerName = reader.GetString("customer_name");
+                        check = true;
                     }
                     reader.Close();
-
+                    
+                    if(!check)
+                    {
+                        Console.Write(" Nhap ten khach hang: ");
+                        string customerName = Console.ReadLine();
+                        while(!(Regex.IsMatch(customerName, @"(^[A-Z,a-z]+$)|^([A-Z,a-z]+ *)+[A-Z,a-z]$")))
+                        {
+                            Console.WriteLine(" Ten khach hang khong hop le!");
+                            Console.Write(" Nhap ten khach hang: ");
+                            customerName = Console.ReadLine();
+                        }
+                        customerName = FixString(customerName);
+                        invoice.InvoiceCustomer = new Customer {CustomerName = customerName, CustomerNumberPhone = customerNumberPhone};
+                        command.CommandText = @"insert into Customers(customer_name, customer_phonenumber)
+                        values ('" + invoice.InvoiceCustomer.CustomerName + "','" + (invoice.InvoiceCustomer.CustomerNumberPhone ?? "") + "');";
+                        command.ExecuteNonQuery();
+                        command.CommandText = "select LAST_INSERT_ID() as customer_id;";
+                        reader = command.ExecuteReader();
+                        if (reader.Read())
+                        {
+                        invoice.InvoiceCustomer.CustomerId = reader.GetInt32("customer_id");
+                        }
+                        reader.Close();
+                    }
                     command.CommandText = "insert into Invoices(staff_id, customer_id, invoice_status) values (@staffId, @customerId, @invoiceStatus);";
                     command.Parameters.Clear();
                     command.Parameters.AddWithValue("@staffId", invoice.InvoiceStaff.StaffID);
@@ -82,9 +123,9 @@ namespace  DAL
                     trans.Commit();
                     result = true;
                 }
-                catch
+                catch(Exception ex)
                 {
-                    
+                    Console.WriteLine(ex.Message);
                     try
                     {
                         trans.Rollback();
@@ -103,6 +144,16 @@ namespace  DAL
                 connection.Close();
             }
             return result;    
+        }
+
+        internal string FixString(string str)
+        {
+            char[] a = str.ToLower().ToCharArray();
+            for (int i = 0; i < a.Length; i++)
+            {
+                a[i] = i == 0 || a[i - 1] == ' ' ? char.ToUpper(a[i]) : a[i];
+            }
+            return new string(a);
         }
     }
 }

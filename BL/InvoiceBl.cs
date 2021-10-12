@@ -13,5 +13,6 @@ namespace BL
             bool result = inDal.CreateInvoice(invoice);
             return result;
         }
+
     }
 }

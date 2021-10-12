@@ -1,4 +1,3 @@
-
 using System;
 using Persistence;
 using DAL;
@@ -14,13 +13,14 @@ namespace BL
         public Item SearchItemByID(string searchKeyWord){
             Item item = new Item();
             item = iDal.GetItemByID(searchKeyWord, item);
+            string search = '"' + searchKeyWord + '"';
             if(item.ItemId == 0)
             {
-                Console.WriteLine(" Khong co ket qua cho tu khoa = {0}", searchKeyWord);
+                Console.WriteLine(" Khong ton tai san pham co ma la {0}", search);
             }
             else
             {
-                ShowItemDetail(item, searchKeyWord);
+                ShowItemDetail(item, search);
             }
             return item;
         }
@@ -29,10 +29,12 @@ namespace BL
         {
             List<Item> itemL = new List<Item>();
             itemL = iDal.GetItem(itemL, comm);
+            string search = '"' + searchKeyWord + '"';
             if (itemL.Count == 0)
             {
-                Console.WriteLine(" Khong co ket qua tim kiem cho = {0}", searchKeyWord);
+                Console.WriteLine(" Khong co san pham phu hop voi tu khoa la {0}", search);
                 Console.Write(" Nhan nut bat ki de tiep tuc...");
+                Console.ReadKey();
             }
             else
             {
@@ -40,27 +42,28 @@ namespace BL
                 int page = 1;
                 int pages = (int)Math.Ceiling((double)itemL.Count / size);
                 int i, k = 0;
-                string chosse;
-                Console.Clear();
+                string chosse, price;
                 for(; ;)
                 {
-                Console.WriteLine("=========================================================================================================================");
-                Console.WriteLine(@"|                              __________        __   _________ __                                                      |");                     
-                Console.WriteLine(@"|                              \______   \ _____/  |_/   _____//  |_  ___________   ____                                |");
-                Console.WriteLine(@"|                              |     ___// __ \   __\_____  \\   __\/  _ \_  __ \_/ __ \                                |");
-                Console.WriteLine(@"|                              |    |   \  ___/|  | /        \|  | (  <_> )  | \/\  ___/                                |");
-                Console.WriteLine(@"|                              |____|    \___  >__|/_______  /|__|  \____/|__|    \___  >                               |");
-                Console.WriteLine(@"|                                            \/            \/                         \/                                |");
-                Console.WriteLine("|                                          Ket qua tim kiem cho tu khoa = {0,-46}|", searchKeyWord);
-                Console.WriteLine("| Tim thay khoang {0,3} vat pham                                                                                Trang {1}/{2} |", itemL.Count, page, pages);
-                Console.WriteLine("=========================================================================================================================");
-                Console.WriteLine("| ID | Ten san pham                                                      | Gia       | Nhan hieu        | Loai          |");
+                Console.Clear();
+                Console.WriteLine("================================================================================================================================");
+                Console.WriteLine(@"|                                __________        __   _________ __                                                           |");                     
+                Console.WriteLine(@"|                                \______   \ _____/  |_/   _____//  |_  ___________   ____                                     |");
+                Console.WriteLine(@"|                                 |     ___// __ \   __\_____  \\   __\/  _ \_  __ \_/ __ \                                    |");
+                Console.WriteLine(@"|                                 |    |   \  ___/|  | /        \|  | (  <_> )  | \/\  ___/                                    |");
+                Console.WriteLine(@"|                                 |____|    \___  >__|/_______  /|__|  \____/|__|    \___  >                                   |");
+                Console.WriteLine(@"|                                               \/            \/                         \/                                    |");
+                Console.WriteLine("|                                            Ket qua tim kiem voi tu khoa la {0,-49} |", search);
+                Console.WriteLine("| Tim thay khoang {0,3} vat pham                                                                                       Trang {1}/{2} |", itemL.Count, page, pages);
+                Console.WriteLine("================================================================================================================================");
+                Console.WriteLine("| Ma SP | Ten san pham                                                      | Gia           | Nhan hieu        | Loai          |");
                 if(itemL.Count < size)
                 {
                     for (i = 0; i< itemL.Count; i++)
                     {
-                        Console.WriteLine("-------------------------------------------------------------------------------------------------------------------------");
-                        Console.WriteLine("| {0,-2} | {1,-65} | {02,9:#,##0} | {3,-16} | {4,-13} |", itemL[i].ItemId, itemL[i].ItemName, itemL[i].ItemPrice, itemL[i].ItemBrand, itemL[i].ItemCategory);
+                        price = FormatCurrency(itemL[i].ItemPrice.ToString());
+                        Console.WriteLine("--------------------------------------------------------------------------------------------------------------------------------");
+                        Console.WriteLine("| {0,5} | {1,-65} | {2,13} | {3,-16} | {4,-13} |", itemL[i].ItemId, itemL[i].ItemName, price, itemL[i].ItemBrand, itemL[i].ItemCategory);
                     }
                 }
                 else
@@ -68,11 +71,12 @@ namespace BL
                         for(i = ((page - 1)) * size; i < k + 10; i++)
                         {
                             if (i == itemL.Count) break;
-                            Console.WriteLine("-------------------------------------------------------------------------------------------------------------------------");
-                            Console.WriteLine("| {0,-2} | {1,-65} | {02,9:#,##0} | {3,-16} | {4,-13} |", itemL[i].ItemId, itemL[i].ItemName, itemL[i].ItemPrice, itemL[i].ItemBrand, itemL[i].ItemCategory);
+                            price = FormatCurrency(itemL[i].ItemPrice.ToString());
+                            Console.WriteLine("--------------------------------------------------------------------------------------------------------------------------------");
+                            Console.WriteLine("| {0,5} | {1,-65} | {2,13} | {3,-16} | {4,-13} |", itemL[i].ItemId, itemL[i].ItemName, price, itemL[i].ItemBrand, itemL[i].ItemCategory);
                         }
                 }
-                Console.WriteLine("=========================================================================================================================");
+                Console.WriteLine("================================================================================================================================");
                 Console.WriteLine(" Nhan P de xem trang truoc.");
                 Console.WriteLine(" Nhan N de xem trang tiep theo.");
                 Console.WriteLine(" Nhap P kem so trang de xem trang mong muon (VD: P1, P2,...).");
@@ -134,13 +138,14 @@ namespace BL
                 else
                 {
                     bool found = false;
+                    string search1 = '"' + chosse + '"';
                     for(i = ((page - 1)) * size; i < k + 10; i++)
                     {
                         try
                         {
                             if(int.Parse(chosse) == itemL[i].ItemId)
                             {
-                                ShowItemDetail(itemL[i], chosse);
+                                ShowItemDetail(itemL[i], search1);
                                 Console.Write(" Nhan phim bat ki de tiep tuc...");
                                 Console.ReadKey();
                                 found = true;
@@ -161,23 +166,174 @@ namespace BL
             }
         }
 
-        internal void ShowItemDetail(Item item, string word)
+        public string FormatCurrency(string currency) 
+        {
+            for(int k = currency.Length - 3; k > 0; k = k - 3)
+            {
+                currency = currency.Insert(k, ".");
+            }
+            currency = currency + " VND";
+            return currency;
+        }
+
+        public void GetAllItem(string comm)
+        {
+            List<Item> itemL = new List<Item>();
+            itemL = iDal.GetItem(itemL, comm);
+            if (itemL.Count == 0)
+            {
+                Console.WriteLine(" Khong co san pham!");
+                Console.Write(" Nhan nut bat ki de tiep tuc...");
+                Console.ReadKey();
+            }
+            else
+            {
+                int size = 10;
+                int page = 1;
+                int pages = (int)Math.Ceiling((double)itemL.Count / size);
+                int i, k = 0;
+                string chosse, price;
+                for(; ;)
+                {
+                Console.Clear();
+                Console.WriteLine("================================================================================================================================");
+                Console.WriteLine(@"|                                __________        __   _________ __                                                           |");                     
+                Console.WriteLine(@"|                                \______   \ _____/  |_/   _____//  |_  ___________   ____                                     |");
+                Console.WriteLine(@"|                                 |     ___// __ \   __\_____  \\   __\/  _ \_  __ \_/ __ \                                    |");
+                Console.WriteLine(@"|                                 |    |   \  ___/|  | /        \|  | (  <_> )  | \/\  ___/                                    |");
+                Console.WriteLine(@"|                                 |____|    \___  >__|/_______  /|__|  \____/|__|    \___  >                                   |");
+                Console.WriteLine(@"|                                               \/            \/                         \/                                    |");
+                Console.WriteLine("|                                                       Tat ca san pham                                                        |");
+                Console.WriteLine("|                                                                                                                    Trang {0}/{1} |", page, pages);
+                Console.WriteLine("================================================================================================================================");
+                Console.WriteLine("| Ma SP | Ten san pham                                                      | Gia           | Nhan hieu        | Loai          |");
+                if(itemL.Count < size)
+                {
+                    for (i = 0; i< itemL.Count; i++)
+                    {
+                        price = FormatCurrency(itemL[i].ItemPrice.ToString());
+                        Console.WriteLine("--------------------------------------------------------------------------------------------------------------------------------");
+                        Console.WriteLine("| {0,5} | {1,-65} | {2,9} | {3,-16} | {4,-13} |", itemL[i].ItemId, itemL[i].ItemName, price, itemL[i].ItemBrand, itemL[i].ItemCategory);
+                    }
+                }
+                else
+                {   
+                        for(i = ((page - 1)) * size; i < k + 10; i++)
+                        {
+                            if (i == itemL.Count) break;
+                            price = FormatCurrency(itemL[i].ItemPrice.ToString());
+                            Console.WriteLine("--------------------------------------------------------------------------------------------------------------------------------");
+                            Console.WriteLine("| {0,5} | {1,-65} | {2,13} | {3,-16} | {4,-13} |", itemL[i].ItemId, itemL[i].ItemName, price, itemL[i].ItemBrand, itemL[i].ItemCategory);
+                        }
+                }
+                Console.WriteLine("================================================================================================================================");
+                Console.WriteLine(" Nhan P de xem trang truoc.");
+                Console.WriteLine(" Nhan N de xem trang tiep theo.");
+                Console.WriteLine(" Nhap P kem so trang de xem trang mong muon (VD: P1, P2,...).");
+                Console.WriteLine(" Nhap ID de xem chi tiet san pham.");
+                Console.WriteLine(" Nhan 0 de quay lai.");
+                Console.WriteLine("-----------------------------------------------------------------");
+                Console.Write(" Chon: ");
+                chosse = Console.ReadLine();
+                while(!(Regex.IsMatch(chosse, @"([PpNn]|[1-9]|^0$)")))
+                        {
+                            Console.Write(" Chon khong hop le! Chon lai: ");
+                            chosse = Console.ReadLine();
+                        }
+                chosse = chosse.Trim();
+                chosse = chosse.ToLower();
+                string number = Regex.Match(chosse, @"\d+").Value;
+                string pageNum = "p" + number;
+                if(chosse == "n")
+                {
+                    if(page == pages) 
+                    {
+                        Console.Write(" Khong co trang sau! Nhan bat ki phim nao de tiep tuc...");
+                        Console.ReadKey();
+                    }
+                    else
+                    {
+                        page = page + 1; 
+                        k = k + 10;
+                    }
+                }
+                else if(chosse == "p")
+                {
+                    if(page == 1) 
+                    {
+                        Console.Write(" Khong co trang truoc! Nhan bat ki phim nao de tiep tuc...");
+                        Console.ReadKey();
+                    }
+                    else
+                    {
+                        page = page - 1; 
+                        k = k - 10;
+                    }
+                }
+                else if(chosse == pageNum)
+                {
+                    if(int.Parse(number) < 0 || int.Parse(number) > pages || int.Parse(number) == 0) 
+                    {
+                        Console.WriteLine(" Khong ton tai trang {0}", int.Parse(number));
+                        Console.Write(" Nhan bat ki phim nao de tiep tuc...");
+                        Console.ReadKey();
+                    }
+                    else
+                    {
+                        page = int.Parse(number);
+                        k =  (int.Parse(number) - 1) * 10;
+                    }
+                } 
+                else if (chosse == "0") return;
+                else
+                {
+                    bool found = false;
+                    string search1 = '"' + chosse + '"';
+                    for(i = ((page - 1)) * size; i < k + 10; i++)
+                    {
+                        try
+                        {
+                            if(int.Parse(chosse) == itemL[i].ItemId)
+                            {
+                                ShowItemDetail(itemL[i], search1);
+                                Console.Write(" Nhan phim bat ki de tiep tuc...");
+                                Console.ReadKey();
+                                found = true;
+                                break;
+                            } 
+                        }
+                        catch(System.FormatException){}
+                        catch(System.ArgumentOutOfRangeException){}
+                    }
+                if(!(found))
+                {
+                    Console.WriteLine(" ID khong phu hop!");
+                    Console.Write(" Nhan phim bat ky de tiep tuc...");
+                    Console.ReadKey();
+                }
+                }
+                }
+            }
+        }
+
+        internal void ShowItemDetail(Item item, string search)
         {
             Console.Clear();
+            string price = FormatCurrency(item.ItemPrice.ToString());
             Console.WriteLine("===============================================================================================");
-            Console.WriteLine(@"|                  __________        __   _________ __                                        |");                     
+            Console.WriteLine(@"|                 __________        __   _________ __                                         |");                     
             Console.WriteLine(@"|                 \______   \ _____/  |_/   _____//  |_  ___________   ____                   |");
             Console.WriteLine(@"|                  |     ___// __ \   __\_____  \\   __\/  _ \_  __ \_/ __ \                  |");
             Console.WriteLine(@"|                  |    |   \  ___/|  | /        \|  | (  <_> )  | \/\  ___/                  |");
             Console.WriteLine(@"|                  |____|    \___  >__|/_______  /|__|  \____/|__|    \___  >                 |");
             Console.WriteLine(@"|                                \/            \/                         \/                  |");
-            Console.WriteLine("|                             THONG TIN CHI TIET SAN PHAM CO ID = {0,-27} |", word);
+            Console.WriteLine("|                             Thong tin chi tiet san pham co ma la {0,-26} |", search);
             Console.WriteLine("===============================================================================================");
-            Console.WriteLine("| ID:                | {0,-70} |", item.ItemId);
+            Console.WriteLine("| Ma san pham:       | {0,-70} |", item.ItemId);
             Console.WriteLine("-----------------------------------------------------------------------------------------------");
             Console.WriteLine("| Ten san pham:      | {0,-70} |", item.ItemName);
             Console.WriteLine("-----------------------------------------------------------------------------------------------");
-            Console.WriteLine("| Gia:               | {00,-70:#,##0} |", item.ItemPrice);
+            Console.WriteLine("| Gia:               | {0,-70} |", price);
             Console.WriteLine("-----------------------------------------------------------------------------------------------");
             Console.WriteLine("| Nhan hieu          | {0,-70} |", item.ItemBrand);
             Console.WriteLine("-----------------------------------------------------------------------------------------------");

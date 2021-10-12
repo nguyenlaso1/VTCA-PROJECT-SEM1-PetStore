@@ -14,5 +14,6 @@ namespace Persistence
         public string ItemCategory {get; set;}
         public int Quantity {get; set;}
         public double Amount {get; set;}
+
     }
 }

@@ -103,9 +103,9 @@ namespace DALTest
         public void GetItem(string searchKeyWord, int expected, int searchType)
         {
             int d = 0;
-            if(searchType == 1) commSearch = "SELECT Items.item_id, Items.item_name, Items.item_price, Brands.brand_name, Categories.category_name FROM Items INNER JOIN Categories ON Items.item_category = Categories.category_id INNER JOIN Brands ON Items.item_brand = Brands.brand_id WHERE Items.item_name like '%"+searchKeyWord+"%';";
-            else if(searchType == 2) commSearch = "SELECT Items.item_id, Items.item_name, Items.item_price, Brands.brand_name, Categories.category_name FROM Items INNER JOIN Categories ON Items.item_category = Categories.category_id INNER JOIN Brands ON Items.item_brand = Brands.brand_id WHERE Categories.category_name like '%"+searchKeyWord+"%';";
-            else if(searchType == 3) commSearch = "SELECT Items.item_id, Items.item_name, Items.item_price, Brands.brand_name, Categories.category_name FROM Items INNER JOIN Categories ON Items.item_category = Categories.category_id INNER JOIN Brands ON Items.item_brand = Brands.brand_id WHERE Brands.brand_name like '%"+searchKeyWord+"%';";
+            if(searchType == 1) commSearch = "SELECT Items.item_id, Items.item_name, Items.item_price, Items.item_quantity, Items.item_weight, Items.item_description, Brands.brand_name, Categories.category_name FROM Items INNER JOIN Categories ON Items.item_category = Categories.category_id INNER JOIN Brands ON Items.item_brand = Brands.brand_id WHERE Items.item_name like '%"+searchKeyWord+"%';";
+            else if(searchType == 2) commSearch = "SELECT Items.item_id, Items.item_name, Items.item_price, Items.item_quantity, Items.item_weight, Items.item_description, Brands.brand_name, Categories.category_name FROM Items INNER JOIN Categories ON Items.item_category = Categories.category_id INNER JOIN Brands ON Items.item_brand = Brands.brand_id WHERE Categories.category_name like '%"+searchKeyWord+"%';";
+            else if(searchType == 3) commSearch = "SELECT Items.item_id, Items.item_name, Items.item_price, Items.item_quantity, Items.item_weight, Items.item_description, Brands.brand_name, Categories.category_name FROM Items INNER JOIN Categories ON Items.item_category = Categories.category_id INNER JOIN Brands ON Items.item_brand = Brands.brand_id WHERE Brands.brand_name like '%"+searchKeyWord+"%';";
             List<Item> list = new List<Item>();
             list = iDal.GetItem(list, commSearch);
             if (expected == 0) Assert.True(list.Count == 0);
