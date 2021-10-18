@@ -4,14 +4,14 @@ using Persistence;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace  DAL
+namespace DAL
 {
     public class InvoiceDal
     {
         private MySqlConnection connection = DbHelper.GetConnection();
         public bool CreateInvoice(Invoice invoice)
         {
-            if(invoice == null || invoice.itemsList == null || invoice.itemsList.Count == 0) return false;
+            if (invoice == null || invoice.itemsList == null || invoice.itemsList.Count == 0) return false;
             bool result = false;
             try
             {
@@ -29,10 +29,10 @@ namespace  DAL
                     invoice.InvoiceCustomer = new Customer() { CustomerId = 1 };
                 }
                 try
-                {   
+                {
                     Console.Write(" Nhap so dien thoai khach hang: ");
                     string customerNumberPhone = Console.ReadLine();
-                    while(!(Regex.IsMatch(customerNumberPhone, @"^(0|\+84)\d{9}$")))
+                    while (!(Regex.IsMatch(customerNumberPhone, @"^(0|\+84)\d{9}$")))
                     {
                         Console.WriteLine(" So dien thoai khong hop le!");
                         Console.Write(" Nhap so dien thoai khach hang: ");
@@ -40,7 +40,7 @@ namespace  DAL
                     }
 
 
-                    command.CommandText = "select *from Customers where customer_phonenumber = '"+customerNumberPhone+"';";
+                    command.CommandText = "select *from Customers where customer_phonenumber = '" + customerNumberPhone + "';";
                     reader = command.ExecuteReader();
                     if (reader.Read())
                     {
@@ -52,19 +52,19 @@ namespace  DAL
                         check = true;
                     }
                     reader.Close();
-                    
-                    if(!check)
+
+                    if (!check)
                     {
                         Console.Write(" Nhap ten khach hang: ");
                         string customerName = Console.ReadLine();
-                        while(!(Regex.IsMatch(customerName, @"(^[A-Z,a-z]+$)|^([A-Z,a-z]+ *)+[A-Z,a-z]$")))
+                        while (!(Regex.IsMatch(customerName, @"(^[A-Z,a-z]+$)|^([A-Z,a-z]+ *)+[A-Z,a-z]$")))
                         {
                             Console.WriteLine(" Ten khach hang khong hop le!");
                             Console.Write(" Nhap ten khach hang: ");
                             customerName = Console.ReadLine();
                         }
                         customerName = FixString(customerName);
-                        invoice.InvoiceCustomer = new Customer {CustomerName = customerName, CustomerNumberPhone = customerNumberPhone};
+                        invoice.InvoiceCustomer = new Customer { CustomerName = customerName, CustomerNumberPhone = customerNumberPhone };
                         command.CommandText = @"insert into Customers(customer_name, customer_phonenumber)
                         values ('" + invoice.InvoiceCustomer.CustomerName + "','" + (invoice.InvoiceCustomer.CustomerNumberPhone ?? "") + "');";
                         command.ExecuteNonQuery();
@@ -72,7 +72,7 @@ namespace  DAL
                         reader = command.ExecuteReader();
                         if (reader.Read())
                         {
-                        invoice.InvoiceCustomer.CustomerId = reader.GetInt32("customer_id");
+                            invoice.InvoiceCustomer.CustomerId = reader.GetInt32("customer_id");
                         }
                         reader.Close();
                     }
@@ -123,7 +123,7 @@ namespace  DAL
                     trans.Commit();
                     result = true;
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
                     try
@@ -143,10 +143,10 @@ namespace  DAL
             {
                 connection.Close();
             }
-            return result;    
+            return result;
         }
 
-        internal string FixString(string str)
+        public static string FixString(string str)
         {
             char[] a = str.ToLower().ToCharArray();
             for (int i = 0; i < a.Length; i++)
