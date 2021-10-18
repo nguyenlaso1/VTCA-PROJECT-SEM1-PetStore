@@ -11,84 +11,7 @@ namespace ConsoleAppPL
     {
         static void Main(string[] args)
         {
-            for (; ; )
-            {
-                Console.Clear();
-                Console.WriteLine("=====================================================================");
-                Console.WriteLine(@"|    __________        __   _________ __                            |");
-                Console.WriteLine(@"|    \______   \ _____/  |_/   _____//  |_  ___________   ____      |");
-                Console.WriteLine(@"|     |     ___// __ \   __\_____  \\   __\/  _ \_  __ \_/ __ \     |");
-                Console.WriteLine(@"|     |    |   \  ___/|  | /        \|  | (  <_> )  | \/\  ___/     |");
-                Console.WriteLine(@"|     |____|    \___  >__|/_______  /|__|  \____/|__|    \___  >    |");
-                Console.WriteLine(@"|                   \/            \/                         \/     |");
-                Console.WriteLine("|                   Chao mung den voi PetStore!                     |");
-                Console.WriteLine("=====================================================================");
-                Console.WriteLine("| 1. Dang nhap                                                      |");
-                Console.WriteLine("| 2. Thoat                                                          |");
-                Console.WriteLine("=====================================================================");
-                bool checkLogin = false;
-                int choice;
-                choice = Choice(2);
-                switch (choice)
-                {
-                    case 1:
-                        do
-                        {
-                            Console.Clear();
-                            Console.WriteLine("=====================================================================");
-                            Console.WriteLine(@"|    __________        __   _________ __                            |");
-                            Console.WriteLine(@"|    \______   \ _____/  |_/   _____//  |_  ___________   ____      |");
-                            Console.WriteLine(@"|     |     ___// __ \   __\_____  \\   __\/  _ \_  __ \_/ __ \     |");
-                            Console.WriteLine(@"|     |    |   \  ___/|  | /        \|  | (  <_> )  | \/\  ___/     |");
-                            Console.WriteLine(@"|     |____|    \___  >__|/_______  /|__|  \____/|__|    \___  >    |");
-                            Console.WriteLine(@"|                   \/            \/                         \/     |");
-                            Console.WriteLine("|                            Dang nhap                              |");
-                            Console.WriteLine("=====================================================================");
-                            Console.Write(" Ten dang nhap: ");
-                            string userName = Console.ReadLine();
-                            while (!(Regex.IsMatch(userName, @"^[a-z,A-Z,0-9]{8,}$")))
-                            {
-                                Console.WriteLine(" Ten dang nhap phai tu 8 ki tu tro len va khong co ki tu dac biet!");
-                                Console.Write(" Ten dang nhap: ");
-                                userName = Console.ReadLine();
-                            }
-                            Console.Write(" Mat khau: ");
-                            string pass = GetPassword();
-                            Console.WriteLine();
-                            while (!(Regex.IsMatch(pass, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$")))
-                            {
-                                Console.WriteLine(" Mat khau phai tu 8 ki tu tro len, co it nhat 1 chu hoa 1 chu thuong\n 1 so va khong chua ki tu dac biet!");
-                                Console.Write(" Mat khau: ");
-                                pass = GetPassword();
-                                Console.WriteLine();
-                            }
-
-                            Staff staff = new Staff() { UserName = userName, Password = pass };
-                            StaffBl bl = new StaffBl();
-                            staff = bl.Login(staff);
-                            if (staff.Role <= 0)
-                            {
-                                Console.WriteLine(" Sai ten dang nhap hoac mat khau!");
-                                Console.Write(" Nhan phim bat ki de tiep tuc...");
-                                Console.ReadKey();
-                            }
-                            else
-                            {
-                                ShowMainMenu(staff);
-                                checkLogin = true;
-
-                            }
-                        } while (checkLogin != true);
-                        break;
-                    case 2:
-                        if (IsContinue(" Ban co chac la muon thoat?(Y/N): "))
-                        {
-                            Console.WriteLine(" Da thoat ung dung!");
-                            Environment.Exit(0);
-                        }
-                        break;
-                }
-            }
+            ShowInterface();
         }
 
         static string GetPassword()
@@ -509,7 +432,7 @@ namespace ConsoleAppPL
                             Console.WriteLine(" Dang xuat thanh cong!");
                             Console.Write(" Nhan phim bat ki de tiep tuc...");
                             Console.ReadKey();
-                            return;
+                            ShowInterface();
                         }
                         else
                         {
@@ -584,7 +507,7 @@ namespace ConsoleAppPL
             return str.ToUpper();
         }
 
-        public static string FixString(string str)
+        static string FixString(string str)
         {
             char[] a = str.ToLower().ToCharArray();
             for (int i = 0; i < a.Length; i++)
@@ -592,6 +515,88 @@ namespace ConsoleAppPL
                 a[i] = i == 0 || a[i - 1] == ' ' ? char.ToUpper(a[i]) : a[i];
             }
             return new string(a);
+        }
+
+        static void ShowInterface()
+        {
+            for (; ; )
+            {
+                Console.Clear();
+                Console.WriteLine("=====================================================================");
+                Console.WriteLine(@"|    __________        __   _________ __                            |");
+                Console.WriteLine(@"|    \______   \ _____/  |_/   _____//  |_  ___________   ____      |");
+                Console.WriteLine(@"|     |     ___// __ \   __\_____  \\   __\/  _ \_  __ \_/ __ \     |");
+                Console.WriteLine(@"|     |    |   \  ___/|  | /        \|  | (  <_> )  | \/\  ___/     |");
+                Console.WriteLine(@"|     |____|    \___  >__|/_______  /|__|  \____/|__|    \___  >    |");
+                Console.WriteLine(@"|                   \/            \/                         \/     |");
+                Console.WriteLine("|                   Chao mung den voi PetStore!                     |");
+                Console.WriteLine("=====================================================================");
+                Console.WriteLine("| 1. Dang nhap                                                      |");
+                Console.WriteLine("| 2. Thoat                                                          |");
+                Console.WriteLine("=====================================================================");
+                bool checkLogin = false;
+                int choice;
+                choice = Choice(2);
+                switch (choice)
+                {
+                    case 1:
+                        do
+                        {
+                            Console.Clear();
+                            Console.WriteLine("=====================================================================");
+                            Console.WriteLine(@"|    __________        __   _________ __                            |");
+                            Console.WriteLine(@"|    \______   \ _____/  |_/   _____//  |_  ___________   ____      |");
+                            Console.WriteLine(@"|     |     ___// __ \   __\_____  \\   __\/  _ \_  __ \_/ __ \     |");
+                            Console.WriteLine(@"|     |    |   \  ___/|  | /        \|  | (  <_> )  | \/\  ___/     |");
+                            Console.WriteLine(@"|     |____|    \___  >__|/_______  /|__|  \____/|__|    \___  >    |");
+                            Console.WriteLine(@"|                   \/            \/                         \/     |");
+                            Console.WriteLine("|                            Dang nhap                              |");
+                            Console.WriteLine("=====================================================================");
+                            Console.Write(" Ten dang nhap: ");
+                            string userName = Console.ReadLine();
+                            while (!(Regex.IsMatch(userName, @"^[a-z,A-Z,0-9]{8,}$")))
+                            {
+                                Console.WriteLine(" Ten dang nhap phai tu 8 ki tu tro len va khong co ki tu dac biet!");
+                                Console.Write(" Ten dang nhap: ");
+                                userName = Console.ReadLine();
+                            }
+                            Console.Write(" Mat khau: ");
+                            string pass = GetPassword();
+                            Console.WriteLine();
+                            while (!(Regex.IsMatch(pass, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$")))
+                            {
+                                Console.WriteLine(" Mat khau phai tu 8 ki tu tro len, co it nhat 1 chu hoa 1 chu thuong\n 1 so va khong chua ki tu dac biet!");
+                                Console.Write(" Mat khau: ");
+                                pass = GetPassword();
+                                Console.WriteLine();
+                            }
+
+                            Staff staff = new Staff() { UserName = userName, Password = pass };
+                            StaffBl bl = new StaffBl();
+                            staff = bl.Login(staff);
+                            if (staff.Role <= 0)
+                            {
+                                Console.WriteLine(" Sai ten dang nhap hoac mat khau!");
+                                Console.Write(" Nhan phim bat ki de tiep tuc...");
+                                Console.ReadKey();
+                            }
+                            else
+                            {
+                                ShowMainMenu(staff);
+                                checkLogin = true;
+
+                            }
+                        } while (checkLogin != true);
+                        break;
+                    case 2:
+                        if (IsContinue(" Ban co chac la muon thoat?(Y/N): "))
+                        {
+                            Console.WriteLine(" Da thoat ung dung!");
+                            Environment.Exit(0);
+                        }
+                        break;
+                }
+            }
         }
     }
 }

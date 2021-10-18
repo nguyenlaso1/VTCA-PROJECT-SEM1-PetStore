@@ -15,9 +15,9 @@ namespace BL
             Item item = new Item();
             item = iDal.GetItemByID(searchKeyWord, item);
             string search = '"' + searchKeyWord + '"';
-            if (item.ItemId == 0)
+            if (item.ItemId <= 0)
             {
-                Console.WriteLine(" Khong ton tai san pham co ma la {0}", search);
+                Console.WriteLine(" Khong ton tai san pham phu hop voi tu khoa la {0}", search);
             }
             else
             {
@@ -33,7 +33,7 @@ namespace BL
             string search = '"' + searchKeyWord + '"';
             if (itemL.Count == 0)
             {
-                Console.WriteLine(" Khong co san pham phu hop voi tu khoa la {0}", search);
+                Console.WriteLine(" Khong ton tai san pham phu hop voi tu khoa la {0}", search);
                 Console.Write(" Nhan nut bat ki de tiep tuc...");
                 Console.ReadKey();
             }

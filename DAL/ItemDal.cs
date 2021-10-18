@@ -16,6 +16,7 @@ namespace DAL
             {
                 try
                 {
+
                     connection.Open();
                     MySqlCommand command = connection.CreateCommand();
                     command.CommandText = "SELECT Items.item_id, Items.item_name, Items.item_price, Items.item_quantity, Items.item_weight, Items.item_description, Brands.brand_name, Categories.category_name FROM Items INNER JOIN Categories ON Items.item_category = Categories.category_id INNER JOIN Brands ON Items.item_brand = Brands.brand_id WHERE Items.item_id = " + searchKeyWord + ";";
@@ -33,7 +34,7 @@ namespace DAL
                     }
                     else
                     {
-                        item.ItemId = 0;
+                        item.ItemId = -1;
                     }
                     reader.Close();
                 }
