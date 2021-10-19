@@ -8,14 +8,6 @@ namespace DALTest
     public class StaffDalTest
     {
         private StaffDal dal = new StaffDal();
-        [Fact]
-        public void LoginTest1()
-        {
-            Staff staff = new Staff(){UserName ="vanan2002", Password = "PetStore123"};
-            int expected = 2;
-            int result = dal.Login(staff).Role;
-            Assert.True(expected == result);
-        }
 
         [Theory]
         [InlineData("pf15", "PF15VTCAcademy", 0)]

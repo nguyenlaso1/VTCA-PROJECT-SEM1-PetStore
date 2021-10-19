@@ -41,7 +41,7 @@ namespace ConsoleAppPL
         {
             string role;
             if (staff.Role == 1) role = "Cua hang truong";
-            else role = "Nhan vien";
+            else role = "Thu ngan";
             ItemBl iBl = new ItemBl();
             InvoiceBl inBl = new InvoiceBl();
             int choice;
